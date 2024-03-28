@@ -1,60 +1,59 @@
 ﻿using System.Data.SqlClient;
 using Dapper.API.Models.Domain;
+using Dapper.API.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Dapper.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1.0/[controller]")]
     [ApiController]
     public class CompanyController : ControllerBase
     {
-        private readonly IConfiguration config;
+        private readonly ICompanyService _companyService;
 
-        public CompanyController(IConfiguration config)
+        public CompanyController(ICompanyService companyService)
         {
-            this.config = config;
+            _companyService = companyService;
         }
 
 
         [HttpGet]
-        public async Task<ActionResult<List<Company>>> GetAllCompanies ()
+        public async Task<ActionResult<IEnumerable<Company>>> GetAllCompanies ()
         {
             try
             {
-                using var connection = new SqlConnection(config.GetConnectionString("DapperConnectionString"));
-                var data = await connection.QueryAsync<Company>("SELECT * FROM Companies");
-
+                var data = await _companyService.GetAllCompanies();
                 return Ok(data);
             }
             catch (Exception ex)
             {
 
-                throw ex;
+                throw;
             }
         }
 
-        [HttpGet("{Id}")]
-        public async Task<ActionResult> GetCompaniesById(int Id)
-        {
-            try
-            {
-                using var connection = new SqlConnection(config.GetConnectionString("DapperConnectionString"));
-                //var data = await connection.QueryFirstAsync<Company>($"SELECT * FROM Companies WHERE Id = {Id}");
-                var data = await connection.QueryFirstOrDefaultAsync<Company>("SELECT * FROM Companies WHERE Id = @Id", new { Id = Id });
+        //[HttpGet("{Id}")]
+        //public async Task<ActionResult> GetCompaniesById(int Id)
+        //{
+        //    try
+        //    {
+        //        using var connection = new SqlConnection(config.GetConnectionString("DapperConnectionString"));
+        //        //var data = await connection.QueryFirstAsync<Company>($"SELECT * FROM Companies WHERE Id = {Id}");
+        //        var data = await connection.QueryFirstOrDefaultAsync<Company>("SELECT * FROM Companies WHERE Id = @Id", new { Id = Id });
 
-                if (data == null)
-                {
-                    return NotFound();
-                }
-                return Ok(data);
-            }
-            catch (Exception ex)
-            {
+        //        if (data == null)
+        //        {
+        //            return NotFound();
+        //        }
+        //        return Ok(data);
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                throw ex;
-            }
-        }
+        //        throw ex;
+        //    }
+        //}
 
         //[HttpPost]
         //public async Task<IActionResult> CreateCompanies(Company company)

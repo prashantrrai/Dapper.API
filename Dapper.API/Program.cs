@@ -1,3 +1,6 @@
+using Dapper.API.DI.Provider;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+//builder.Services.UseServiceProviderFactory(new DIProvider());
+//builder.Services.AddScoped<IBaseRepository, BaseRepository>();
+//builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+//builder.Services.AddScoped<ICompanyService, CompanyService>();
+
 
 var app = builder.Build();
 
