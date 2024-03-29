@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using Dapper.API.Domain.DTOs.Request.Company;
 using Dapper.API.Models.Domain;
 using Dapper.API.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +19,7 @@ namespace Dapper.API.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("GetAllCompanies")]
         public async Task<ActionResult<IEnumerable<Company>>> GetAllCompanies ()
         {
             try
@@ -33,27 +34,25 @@ namespace Dapper.API.Controllers
             }
         }
 
-        //[HttpGet("{Id}")]
-        //public async Task<ActionResult> GetCompaniesById(int Id)
-        //{
-        //    try
-        //    {
-        //        using var connection = new SqlConnection(config.GetConnectionString("DapperConnectionString"));
-        //        //var data = await connection.QueryFirstAsync<Company>($"SELECT * FROM Companies WHERE Id = {Id}");
-        //        var data = await connection.QueryFirstOrDefaultAsync<Company>("SELECT * FROM Companies WHERE Id = @Id", new { Id = Id });
+        [HttpGet("GetCompaniesById")]
+        public async Task<ActionResult> GetCompaniesById([FromQuery] GetCompanyByIdRequestDto request)
+        {
+            try
+            {
+                var data = await _companyService.GetCompaniesById(request);
+                if (data == null)
+                {
+                    return NotFound(); 
+                }
 
-        //        if (data == null)
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(data);
-        //    }
-        //    catch (Exception ex)
-        //    {
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
 
-        //        throw ex;
-        //    }
-        //}
+                throw;
+            }
+        }
 
         //[HttpPost]
         //public async Task<IActionResult> CreateCompanies(Company company)
@@ -77,5 +76,7 @@ namespace Dapper.API.Controllers
         //        throw ex;
         //    }
         //}
+
+        
     }
 }

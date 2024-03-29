@@ -1,5 +1,4 @@
-﻿using System;
-using Dapper.API.DI.Registrator;
+﻿using Dapper.API.DI.Registrator;
 using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
 

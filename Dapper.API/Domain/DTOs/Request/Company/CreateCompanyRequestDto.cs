@@ -1,6 +1,6 @@
 ﻿namespace Dapper.API.Domain.DTOs.Request.Company
 {
-    public class CreateCompanyRequest
+    public class CreateCompanyRequestDto
     {
         public string Name { get; set; }
         public string Address { get; set; }

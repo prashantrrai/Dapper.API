@@ -12,12 +12,21 @@ namespace Dapper.API.Data.Implementations.Base
             _config = configuration;
         }
 
-        public async Task<IEnumerable<T>> QueryAsync<T>(string sql)
+        public async Task<IEnumerable<T>> QueryAsync<T>(string sql, object parameter = null)
         {
             using (var connection = new SqlConnection(_config.GetConnectionString("DapperConnectionString")))
             {
-                return await connection.QueryAsync<T>(sql);
+                return await connection.QueryAsync<T>(sql, parameter);
             }
         }
+
+
+        //public async Task<SqlMapper.GridReader> QueryMultipleAsync(string sqlquery)
+        //{
+        //    using (var connection = new SqlConnection(_config.GetConnectionString("DapperConnectionString")))
+        //    {
+        //        return await connection.QueryMultipleAsync(sqlquery);
+        //    }
+        //}
     }
 }
